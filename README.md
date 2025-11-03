@@ -28,7 +28,7 @@ Applied to **HST data of M51** (deprojected, companion masked), the model yields
 ## Try It Yourself
 
 ```bash
-git clone https://github.com/[DEIN_USERNAME]/k-synchronization.git
+git clone https://github.com/chillman1988/k-synchronization.git
 cd k-synchronization
 pip install -r requirements.txt
 jupyter notebook notebooks/M51_Demo.ipynb
