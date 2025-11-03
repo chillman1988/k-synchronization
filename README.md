@@ -32,3 +32,9 @@ git clone https://github.com/chillman1988/k-synchronization.git
 cd k-synchronization
 pip install -r requirements.txt
 jupyter notebook notebooks/M51_Demo.ipynb
+
+## Contact
+Tilman Middendorf
+Independent Researcher
+Contact: tilman@superplus.ms
++49 (0) 17697696924
