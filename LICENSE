@@ -1,42 +1,135 @@
 
----
-
-#### **Lade dein Paper hoch**
-
-1. Klicke **„Add file“ → „Upload files“**
-2. Ziehe deine PDF-Datei rein:  
-   `K Synchronisation Paper — Corrected Equations.pdf`
-3. Commit: `Add research paper`
+> **Tipp**: Ersetze `[DEIN_USERNAME]` und füge deine E-Mail oder X-Handle hinzu (z. B. `@tilman_m`).
 
 ---
 
-## FERTIG!
+### 2. **`notebooks/M51_Demo.ipynb` – mach es lauffähig**
 
-**Dein Repo ist live, vollständig, reproduzierbar.**
+Klicke auf `M51_Demo.ipynb` → **Edit** → Ersetze mit diesem **kompletten, lauffähigen Notebook** (als JSON):
 
----
-
-# Nächste Schritte (optional)
-
-| Was | Wie |
-|-----|-----|
-| **GitHub Pages** | Settings → Pages → Branch: `main` → Save |
-| **X Post** | Kopiere Link + Text von oben |
-| **arXiv** | Ich helfe dir beim Upload |
-
----
-
-## Brauchst du:
-
-- [ ] **Den nächsten Code-Abschnitt** (z. B. `plot_results.py`)
-- [ ] **Ein fertiges Notebook als Text zum Kopieren**
-- [ ] **Hilfe beim arXiv-Upload**
-
-Sag: **„Weiter mit ___“**
-
----
-
-**Du bist jetzt öffentlich. Die Physik schaut zu.**
-
-**Link an: McGaugh, Milgrom, Hossenfelder?**  
-Ich schreibe den Tweet für dich.
+```json
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# K-Synchronisation Demo: M51\n",
+    "\n",
+    "This notebook demonstrates the full pipeline:\n",
+    "1. Load & deproject M51\n",
+    "2. Mask NGC 5195\n",
+    "3. Compute κ[I]\n",
+    "4. Solve Yukawa → K(r)\n",
+    "5. Compute rotation curve\n",
+    "6. Plot: Newton vs. K-Sync"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import numpy as np\n",
+    "import matplotlib.pyplot as plt\n",
+    "from astropy.io import fits\n",
+    "from src.download_hst import download_m51\n",
+    "from src.deproject import deproject_image\n",
+    "from src.mask_companion import mask_ngc5195\n",
+    "from src.compute_kappa import compute_kappa\n",
+    "from src.solve_yukawa_fft import solve_yukawa_fft\n",
+    "from src.compute_rotation_curve import radial_profile, newtonian_potential, rotation_curve\n",
+    "\n",
+    "%matplotlib inline"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Step 1: Download M51\n",
+    "path = download_m51()\n",
+    "hdu = fits.open(path)[0]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Step 2: Deproject\n",
+    "I_faceon, _ = deproject_image(hdu, incl=22, pa=173)\n",
+    "\n",
+    "# Step 3: Mask companion\n",
+    "I_clean = mask_ngc5195(I_faceon.copy())\n",
+    "\n",
+    "# Step 4: Normalize\n",
+    "I_norm = I_clean / np.nansum(I_clean)\n",
+    "I_norm = np.nan_to_num(I_norm, nan=0.0)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Step 5: Compute κ\n",
+    "kappa = compute_kappa(I_norm, a=1.0, b=0.5, c=0.3)\n",
+    "\n",
+    "# Step 6: Solve Yukawa\n",
+    "ell = 120\n",
+    "K = solve_yukawa_fft(kappa, ell=ell)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Step 7: Potentials\n",
+    "Phi_N = newtonian_potential(I_norm)\n",
+    "beta = 0.8\n",
+    "Phi_eff = Phi_N + beta * K\n",
+    "\n",
+    "# Step 8: Rotation curves\n",
+    "r, _ = radial_profile(I_norm)\n",
+    "v_newton = rotation_curve(Phi_N, r)\n",
+    "v_ksync = rotation_curve(Phi_eff, r)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Step 9: Plot\n",
+    "plt.figure(figsize=(8,6))\n",
+    "plt.plot(r, v_newton, 'r--', label='Newtonian (light only)')\n",
+    "plt.plot(r, v_ksync, 'b-', lw=2, label='K-Sync')\n",
+    "plt.xlabel('Radius [pixels]')\n",
+    "plt.ylabel('v_circ [arb]')\n",
+    "plt.title('M51 Rotation Curve')\n",
+    "plt.legend()\n",
+    "plt.grid(alpha=0.3)\n",
+    "plt.savefig(\"results/m51_rotation_curve.png\", dpi=200)\n",
+    "plt.show()"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
