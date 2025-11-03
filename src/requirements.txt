@@ -1,0 +1,8 @@
+numpy>=1.24
+astropy>=5.3
+scipy>=1.11
+matplotlib>=3.7
+scikit-image>=0.21
+photutils>=0.9
+reproject>=0.10
+jupyter>=1.0
