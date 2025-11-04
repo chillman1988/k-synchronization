@@ -6,11 +6,11 @@ Second Postulate: Whoever is part of a system cannot comprehend it, only shape i
 
 Third Postulate: Every act of fragmentation (definition) is therefore a creative act, because through it new degrees of freedom are realized.
 
-Relation to Quantum Mechanics
+Relation to Quantum Mechanics: 
 In quantum mechanics, the Hilbert space represents a pure probability distribution. A measurement realizes a specific state within measurable reality (Copenhagen interpretation). The interference pattern can be understood as a projection of this probability distribution—indicating where the system exhibits stronger or weaker correlations.
 In this sense, light becomes a holographic proxy that indirectly conveys the correlational information of the system through approximation.
 
-Galaxies and Astrophysics
+Galaxies and Astrophysics: 
 When we look at the rotation velocities of galaxies, we find that they remain flat. Normally, to make the equations “work,” an additional mass distribution in the outer regions—dark matter—is postulated, although it has never been empirically detected.
 However, as previously outlined (if we take quantum mechanics seriously), light does not primarily convey mass distribution (no thing in itself), but rather the correlational structure of the formation in terms of its Hilbert space.
 
