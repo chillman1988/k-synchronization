@@ -1,7 +1,9 @@
 Correlation in Spacetime
 
 First Postulate: The thing in itself does not exist (at least not from our perspective). (Kant)
+
 Second Postulate: Whoever is part of a system cannot comprehend it, only shape it. (This should not be difficult for an engineer to acknowledge, since engineers prefer to act practically.)
+
 Third Postulate: Every act of fragmentation (definition) is therefore a creative act, because through it new degrees of freedom are realized.
 
 Relation to Quantum Mechanics
